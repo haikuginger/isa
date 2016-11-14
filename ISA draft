@@ -1,0 +1,24 @@
+code, abbrev,   name,                description
+# 1-Register and 2-Register Instructions
+000D, LDNX,  "Load Next",          Load word at address PC+1 into register D
+01MD, LOAD,  "Load",               Load word at address in register S into register D
+020S, DMPNX, "Dump Next",          Dump contents of register S into address PC+1
+03SM, DUMP,  "Dump",               Dump contents of register S to address M
+04XY, COPY,  "Copy",               Copy contents of register X to register Y
+050X, INVRT, "Invert",             Bitwise invert contents of register X
+060X, LSHFT, "Left shift",         Left shift contents of register X 
+070X, RSHFT, "Right shift,         Right shift contents of register X
+080X, SRTS,  "Signed right shift", Right shift contents of register X, copying the sign bit
+
+
+
+# 3-Register Instructions
+1XSD, CP?NZ, "Copy if Nonzero", If X contains any 1s, copy contents of S into D
+
+
+2ABR, AND, "Logical And"
+3ABR, NAND, "Logical Nand"
+4ABR, OR, "Logical Or"
+5ABR, NOR, "Logical Nor"
+6ABR, XOR, "Logical Exclusive Or"
+7ABR, XNOR, "Logical Exclusive Nor"
