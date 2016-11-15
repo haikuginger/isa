@@ -9,12 +9,13 @@ code, abbrev,   name,                description
 060X, LSHFT, "Left shift",         Left shift contents of register X 
 070X, RSHFT, "Right shift,         Right shift contents of register X
 080X, SRTS,  "Signed right shift", Right shift contents of register X, copying the sign bit
+0900, HALT,  "Halt",               Halt execution
 
 
 
 # 3-Register Instructions
-1XSD, CP?NZ, "Copy if Nonzero", If X contains any 1s, copy contents of S into D
-
+1XSD, CP?NZ, "Copy if Nonzero",    If X contains any 1s, copy contents of S into D
+8ALB, MEMCP, "Bulk copy",          Copy L pages from a point starting at the address contained in register A to the point starting at the address contained in register B
 
 2ABR, AND, "Logical And"
 3ABR, NAND, "Logical Nand"

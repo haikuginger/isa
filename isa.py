@@ -23,27 +23,55 @@ class InstructionSetMixin(object):
         data = self.memory[src_addr]
         self.registers[dest] = data
 
+    @split_opcode
+    def DMPNX(self, *args):
+        src = args[3]
+        data = self.registers[src]
+        self.memory[self.pc + 1] = data
+
+    @split_opcode
+    def DUMP(self, *args):
+        src = args[2]
+        dest = self.registers[args[3]]
+        self.memory[dest] = self.registers[src]
+
+    @split_opcode
+    def MEMCP(self, *args):
+        srcaddr = self.registers[args[1]]
+        length = self.registers[args[2]]
+        destaddr = self.registers[args[3]]
+        for i in range(length):
+            self.memory[destaddr + i] = self.memory[srcaddr + i]
+
+    @split_opcode
+    def HALT(self, *args):
+        self.halted = True
+
 
 class CPU(InstructionSetMixin, object):
 
     operations = (
         (0x0000, 2, 'LDNX',),
         (0x0100, 2, 'LOAD',),
+        (0x0200, 2, 'DMPNX',),
+        (0x0300, 2, 'DUMP',),
+        (0x8000, 3, 'MEMCP',),
+        (0x0900, 2, 'HALT',),
     )
 
-    def __init__(self, memory=None):
-        self.memory = [int(x, 16) for x in memory]
-        self.registers = [int('0x0000', 16)] * 16
+    def __init__(self, memory=None, registers=None):
+        self.memory = memory
+        self.registers = [0x0000] * 16
     
     @property
     def pc(self):
         return self.registers[0]
 
     def run(self):
-        while self.pc < len(self.memory):
+        self.halted = False
+        while self.pc < len(self.memory) and not self.halted:
             opcode = self.load(self.pc)
-            self.execute(opcode)
-            self.print_registers()
+            self.execute(opcode)!
             self.registers[0] += 1
     
     def execute(self, opcode):
@@ -53,7 +81,7 @@ class CPU(InstructionSetMixin, object):
 
     def get_operation(self, opcode):
         for op in self.operations:
-            shift = (4 - op[1]) * 4
+            shift = op[1] * 4
             if op[0] >> shift == opcode >> shift:
                 return getattr(self, op[2])
 
@@ -62,7 +90,4 @@ class CPU(InstructionSetMixin, object):
 
     def print_registers(self):
         print(["0x%0.4X" % x for x in self.registers])
-
-x = CPU(memory=['0001', '0003', '0112', 'FFFF'])
-x.run()
 
