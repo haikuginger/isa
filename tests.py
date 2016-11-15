@@ -4,6 +4,10 @@ from isa import CPU
 class TestCPU(TestCase):
 
     def test_memcp(self):
+        """
+        Test that we can block-copy data from a location in memory
+        to another location in memory.
+        """
         stream = [
             0x0001, # LDNX to register 1
             0x0008,

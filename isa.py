@@ -8,38 +8,33 @@ def split_opcode(fn):
 class InstructionSetMixin(object):
         
     @split_opcode
-    def LDNX(self, *args):
-        dest = args[3]
+    def LDNX(self, op1, op2, _, dest):
         addr = self.pc + 1
         data = self.memory[addr]
         self.registers[dest] = data
         self.registers[0] += 1
 
     @split_opcode
-    def LOAD(self, *args):
-        src = args[2]
-        dest = args[3]
+    def LOAD(self, op1, op2, src, dest):
         src_addr = self.registers[src]
         data = self.memory[src_addr]
         self.registers[dest] = data
 
     @split_opcode
-    def DMPNX(self, *args):
-        src = args[3]
+    def DMPNX(self, op1, op2, _, src):
         data = self.registers[src]
         self.memory[self.pc + 1] = data
 
     @split_opcode
-    def DUMP(self, *args):
-        src = args[2]
-        dest = self.registers[args[3]]
-        self.memory[dest] = self.registers[src]
+    def DUMP(self, op1, op2, src, dest):
+        dest_addr = self.registers[dest]
+        self.memory[dest_addr] = self.registers[src]
 
     @split_opcode
-    def MEMCP(self, *args):
-        srcaddr = self.registers[args[1]]
-        length = self.registers[args[2]]
-        destaddr = self.registers[args[3]]
+    def MEMCP(self, op1, src, length, dest):
+        srcaddr = self.registers[src]
+        length = self.registers[length]
+        destaddr = self.registers[dest]
         for i in range(length):
             self.memory[destaddr + i] = self.memory[srcaddr + i]
 
@@ -71,7 +66,7 @@ class CPU(InstructionSetMixin, object):
         self.halted = False
         while self.pc < len(self.memory) and not self.halted:
             opcode = self.load(self.pc)
-            self.execute(opcode)!
+            self.execute(opcode)
             self.registers[0] += 1
     
     def execute(self, opcode):
