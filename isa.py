@@ -57,17 +57,21 @@ class CPU(InstructionSetMixin, object):
     def __init__(self, memory=None, registers=None):
         self.memory = memory
         self.registers = [0x0000] * 16
+        self.halted = False
     
     @property
     def pc(self):
         return self.registers[0]
 
     def run(self):
-        self.halted = False
         while self.pc < len(self.memory) and not self.halted:
             opcode = self.load(self.pc)
             self.execute(opcode)
             self.registers[0] += 1
+
+    def reset(self):
+        self.halted = False
+        self.registers = [0x0000] * 16
     
     def execute(self, opcode):
         operation = self.get_operation(opcode)
