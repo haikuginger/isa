@@ -90,3 +90,5 @@ class CPU(InstructionSetMixin, object):
     def print_registers(self):
         print(["0x%0.4X" % x for x in self.registers])
 
+    def print_memory(self):
+        print(["0x%0.4X" % x for x in self.memory])
