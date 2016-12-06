@@ -6,6 +6,15 @@ def split_opcode(fn):
     return inner
 
 class InstructionSetMixin(object):
+
+    operations = (
+        (0x0000, 1, 'LDNX',),
+        (0x0100, 2, 'LOAD',),
+        (0x0200, 1, 'DMPNX',),
+        (0x0300, 2, 'DUMP',),
+        (0x8000, 3, 'MEMCP',),
+        (0x0900, 0, 'HALT',),
+    )
         
     @split_opcode
     def LDNX(self, op1, op2, _, dest):
@@ -44,15 +53,6 @@ class InstructionSetMixin(object):
 
 
 class CPU(InstructionSetMixin, object):
-
-    operations = (
-        (0x0000, 2, 'LDNX',),
-        (0x0100, 2, 'LOAD',),
-        (0x0200, 2, 'DMPNX',),
-        (0x0300, 2, 'DUMP',),
-        (0x8000, 3, 'MEMCP',),
-        (0x0900, 2, 'HALT',),
-    )
 
     def __init__(self, memory=None, registers=None):
         self.memory = memory
