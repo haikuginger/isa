@@ -1,10 +1,15 @@
+# Load value 0x0008 to register 1
 LDNX 1
 8
+# Load value 0x000A to register 2
 LDNX 2
 A
+# Load value 0x0002 to register 3
 LDNX 3
 2
+# Copy 2 pages from *R1 to *R2
 MEMCP 1 3 2
+# Stop execution
 HALT
 DEAD
 BEEF
